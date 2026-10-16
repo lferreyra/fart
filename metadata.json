@@ -1,0 +1,6 @@
+{
+  "name": "FartBlaster 3000 - Máquina de Pedos & Broma",
+  "description": "Tablero de efectos de sonido de pedos estilo cómic con temporizador de bromas, sensor de movimiento y modo sigilo para gastar bromas sorpresa.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

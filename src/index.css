@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --comic-yellow: #FFE600;
+    --comic-red: #FF334B;
+    --comic-green: #22C55E;
+    --comic-slime: #84CC16;
+    --comic-purple: #A855F7;
+    --comic-cyan: #06B6D4;
+    --comic-orange: #FB923C;
+    --comic-pink: #EC4899;
+  }
+
+  body {
+    font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #FEF9C3;
+    color: #18181B;
+    overflow-x: hidden;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  h1, h2, h3, .comic-font {
+    font-family: 'Luckiest Guy', 'Bangers', cursive, sans-serif;
+    letter-spacing: 0.05em;
+  }
+
+  .comic-title {
+    font-family: 'Bangers', cursive, sans-serif;
+    letter-spacing: 0.08em;
+  }
+}
+
+/* Comic Halftone Pattern */
+.halftone-bg {
+  background-color: #fef08a;
+  background-image: radial-gradient(#facc15 18%, transparent 18%), radial-gradient(#eab308 18%, transparent 18%);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+}
+
+.halftone-dots-dark {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.08) 15%, transparent 16%);
+  background-size: 16px 16px;
+}
+
+/* Comic Hard Shadows */
+.comic-shadow {
+  box-shadow: 4px 4px 0px 0px #000000;
+}
+
+.comic-shadow-lg {
+  box-shadow: 6px 6px 0px 0px #000000;
+}
+
+.comic-shadow-sm {
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+.comic-shadow-colored {
+  box-shadow: 5px 5px 0px 0px rgba(0,0,0,0.85);
+}
+
+.comic-button {
+  transition: all 0.08s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.comic-button:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px 0px #000000;
+}
+
+.comic-button:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0px 0px #000000;
+}
+
+/* Text Comic Stroke */
+.comic-text-stroke {
+  text-shadow: 
+    -2px -2px 0 #000,  
+     2px -2px 0 #000,
+    -2px  2px 0 #000,
+     2px  2px 0 #000,
+     3px  3px 0 #000;
+}
+
+.comic-text-stroke-sm {
+  text-shadow: 
+    -1px -1px 0 #000,  
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000,
+     2px  2px 0 #000;
+}
+
+/* Animated gas puff keyframe */
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(0.6); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(-40px) scale(1.2); opacity: 0; }
+}
+
+.animate-float-up {
+  animation: floatUp 0.8s ease-out forwards;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+.animate-wiggle {
+  animation: wiggle 0.4s ease-in-out infinite;
+}
+
+@keyframes pulse-fast {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.animate-pulse-fast {
+  animation: pulse-fast 0.6s ease-in-out infinite;
+}
