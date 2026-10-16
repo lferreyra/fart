@@ -64,15 +64,9 @@ export const customRecordToProfile = (record: CustomFartRecord): FartSoundProfil
     badgeBg: record.badgeBg,
     borderCol: record.borderCol,
     dangerLevel: record.dangerLevel,
-    category: 'bizarros',
-    basePitch: 100,
-    pitchEnd: 100,
+    category: 'clasicos',
+    audioSrc: record.dataUrl,
     duration: record.duration,
-    flutterRate: 20,
-    noiseLevel: 0,
-    wetness: 0,
-    bassGain: 1,
-    harmonicType: 'sine',
   };
 };
 

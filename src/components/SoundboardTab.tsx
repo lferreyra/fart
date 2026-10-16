@@ -4,9 +4,9 @@
  */
 
 import React, { useState } from 'react';
-import { FART_PRESETS, FartSoundProfile, FartMixerSettings } from '../audio/fartEngine';
+import { REAL_FART_PRESETS, FartSoundProfile, FartMixerSettings } from '../audio/fartEngine';
 import { CustomFartRecord, customRecordToProfile } from '../audio/customAudioStore';
-import { Play, Timer, Skull, Search, Flame, Shuffle, Sparkles, PlusCircle, Trash2, Mic, Upload } from 'lucide-react';
+import { Play, Timer, Skull, Search, Flame, Shuffle, Sparkles, PlusCircle, Trash2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface SoundboardTabProps {
@@ -33,15 +33,15 @@ export const SoundboardTab: React.FC<SoundboardTabProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const customProfiles: FartSoundProfile[] = customSounds.map(customRecordToProfile);
-  const allAvailableFarts = [...customProfiles, ...FART_PRESETS];
+  const allAvailableFarts = [...customProfiles, ...REAL_FART_PRESETS];
 
   const categories = [
     { id: 'todos', label: '🔥 Todos', count: allAvailableFarts.length },
-    ...(customSounds.length > 0 ? [{ id: 'mis_sonidos', label: '⭐ Mis Sonidos', count: customSounds.length }] : []),
-    { id: 'clasicos', label: '💨 Clásicos', count: FART_PRESETS.filter(f => f.category === 'clasicos').length },
-    { id: 'explosivos', label: '💣 Explosivos', count: FART_PRESETS.filter(f => f.category === 'explosivos').length },
-    { id: 'humedos', label: '💦 Húmedos', count: FART_PRESETS.filter(f => f.category === 'humedos').length },
-    { id: 'bizarros', label: '👽 Bizarros', count: FART_PRESETS.filter(f => f.category === 'bizarros').length },
+    ...(customSounds.length > 0 ? [{ id: 'mis_sonidos', label: '⭐ Mis Subidos', count: customSounds.length }] : []),
+    { id: 'clasicos', label: '💨 Clásicos', count: REAL_FART_PRESETS.filter(f => f.category === 'clasicos').length },
+    { id: 'explosivos', label: '💣 Explosivos', count: REAL_FART_PRESETS.filter(f => f.category === 'explosivos').length },
+    { id: 'humedos', label: '💦 Húmedos', count: REAL_FART_PRESETS.filter(f => f.category === 'humedos').length },
+    { id: 'chillon', label: '🎈 Agudos', count: REAL_FART_PRESETS.filter(f => f.category === 'chillon').length },
   ];
 
   const filteredFarts = allAvailableFarts.filter((fart) => {
@@ -90,7 +90,7 @@ export const SoundboardTab: React.FC<SoundboardTabProps> = ({
 
   return (
     <div className="space-y-6 pb-20">
-      {/* Onomatopoeia Banner Pop (Shows when any fart triggers) */}
+      {/* Onomatopoeia Banner Pop */}
       {lastPlayedOnomatopoeia && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-40 pointer-events-none animate-bounce">
           <div className="bg-yellow-400 border-4 border-black comic-shadow-lg px-6 py-2.5 rounded-2xl transform -rotate-3 text-2xl sm:text-4xl font-black text-black comic-font comic-text-stroke text-white tracking-widest uppercase shadow-2xl flex items-center gap-2">
@@ -105,13 +105,13 @@ export const SoundboardTab: React.FC<SoundboardTabProps> = ({
       <div className="bg-white border-4 border-black comic-shadow rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden">
         <div className="z-10 text-center md:text-left">
           <div className="inline-flex items-center gap-1.5 bg-lime-300 text-lime-950 px-3 py-0.5 rounded-full border-2 border-black text-xs font-black tracking-wide mb-2 uppercase">
-            <Sparkles className="w-3.5 h-3.5" /> 100% Acústica Fiel & Cero Retardo
+            <Sparkles className="w-3.5 h-3.5 text-green-700" /> Audios Reales Grabados
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-zinc-900 comic-font tracking-tight leading-tight">
-            TABLERO DE PEDOS & SONIDOS
+            TABLERO DE PEDOS REALES
           </h2>
           <p className="text-sm font-medium text-zinc-600 max-w-lg mt-0.5">
-            Toca cualquier botón para disparar el sonido inmediatamente, o pulsa el icono de reloj para programarlo como broma sorpresa.
+            Grabaciones auténticas de audio real listadas en el tablero. Toca para disparar o pulsa en programar para tu broma.
           </p>
         </div>
 
@@ -122,7 +122,7 @@ export const SoundboardTab: React.FC<SoundboardTabProps> = ({
             className="flex-1 md:flex-initial flex items-center justify-center gap-1.5 bg-lime-400 hover:bg-lime-300 text-lime-950 font-black px-4 py-3 rounded-2xl border-3 border-black comic-shadow comic-button text-xs sm:text-sm uppercase tracking-wider whitespace-nowrap"
           >
             <PlusCircle className="w-4 h-4 text-black" />
-            <span>+ Subir MP3 / Grabar</span>
+            <span>+ Subir Mi Audio</span>
           </button>
 
           <button
@@ -203,7 +203,7 @@ export const SoundboardTab: React.FC<SoundboardTabProps> = ({
                         onDeleteCustomSound(fart.id);
                       }}
                       className="text-zinc-400 hover:text-red-600 p-1 transition-colors"
-                      title="Eliminar sonido"
+                      title="Eliminar sonido subido"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -257,7 +257,7 @@ export const SoundboardTab: React.FC<SoundboardTabProps> = ({
                     onSetTimerForFart(fart);
                   }}
                   className="flex items-center gap-1 text-[11px] font-extrabold bg-amber-100 hover:bg-amber-200 active:bg-amber-300 text-amber-950 px-2.5 py-1 rounded-lg border border-black transition-colors"
-                  title="Configurar temporizador con este fart"
+                  title="Configurar temporizador con este fart real"
                 >
                   <Timer className="w-3 h-3 text-amber-700" />
                   <span>Programar</span>
@@ -271,8 +271,7 @@ export const SoundboardTab: React.FC<SoundboardTabProps> = ({
       {filteredFarts.length === 0 && (
         <div className="bg-white border-3 border-black rounded-2xl p-8 text-center comic-shadow max-w-md mx-auto">
           <p className="text-3xl mb-2">💨</p>
-          <p className="font-extrabold text-lg text-zinc-800">No encontramos ningún pedo con ese nombre</p>
-          <p className="text-sm text-zinc-500 mt-1">Prueba con otra palabra o limpia el buscador.</p>
+          <p className="font-extrabold text-lg text-zinc-800">No hay sonidos con ese filtro</p>
           <button
             onClick={() => {
               setSearchQuery('');
@@ -280,7 +279,7 @@ export const SoundboardTab: React.FC<SoundboardTabProps> = ({
             }}
             className="mt-4 px-4 py-2 bg-yellow-400 font-extrabold border-2 border-black rounded-xl text-sm"
           >
-            Ver todos los sonidos
+            Ver todos los sonidos reales
           </button>
         </div>
       )}
@@ -290,18 +289,18 @@ export const SoundboardTab: React.FC<SoundboardTabProps> = ({
         <div className="bg-gradient-to-r from-red-600 via-rose-600 to-red-600 border-4 border-black comic-shadow-lg rounded-2xl p-4 sm:p-6 text-white flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-center sm:text-left">
             <div className="inline-flex items-center gap-1 text-xs font-black bg-yellow-400 text-black px-2 py-0.5 rounded border border-black uppercase mb-1">
-              🚨 MÁXIMA POTENCIA
+              🚨 MÁXIMA POTENCIA REAL
             </div>
             <h3 className="text-xl sm:text-2xl font-black comic-font tracking-wide">
               ¿SITUACIÓN DE EMERGENCIA?
             </h3>
             <p className="text-xs sm:text-sm text-red-100 font-medium">
-              Dispara una explosión sónica devastadora para romper el hielo o desatar risas instantáneas.
+              Dispara el Bombazo Atómico real grabado a máximo volumen.
             </p>
           </div>
           <button
             onClick={() => {
-              const bomb = FART_PRESETS.find(f => f.id === 'bombazo') || FART_PRESETS[0];
+              const bomb = REAL_FART_PRESETS[1] || REAL_FART_PRESETS[0];
               onPlayFart(bomb);
               confetti({
                 particleCount: 70,
@@ -313,7 +312,7 @@ export const SoundboardTab: React.FC<SoundboardTabProps> = ({
             className="w-full sm:w-auto whitespace-nowrap bg-yellow-400 hover:bg-yellow-300 active:bg-yellow-500 text-black font-black text-base sm:text-lg px-6 py-3.5 rounded-2xl border-3 border-black comic-shadow comic-button flex items-center justify-center gap-2 uppercase tracking-wider"
           >
             <Flame className="w-6 h-6 fill-red-600 text-red-600 animate-bounce" />
-            <span>¡DETONAR BOMBAZO!</span>
+            <span>¡DETONAR BOMBAZO REAL!</span>
           </button>
         </div>
       </div>

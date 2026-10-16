@@ -8,11 +8,10 @@ import { ComicHeader } from './components/ComicHeader';
 import { SoundboardTab } from './components/SoundboardTab';
 import { PrankTimerTab } from './components/PrankTimerTab';
 import { WhoopeeCushionTab } from './components/WhoopeeCushionTab';
-import { FartLabTab } from './components/FartLabTab';
 import { StealthOverlay } from './components/StealthOverlays';
 import { AudioImportModal } from './components/AudioImportModal';
 import {
-  FART_PRESETS,
+  REAL_FART_PRESETS,
   FartSoundProfile,
   FartMixerSettings,
   fartAudio,
@@ -28,8 +27,6 @@ import {
   LayoutGrid,
   Timer,
   Activity,
-  Sliders,
-  Sparkles,
   BookOpen,
   X,
   ExternalLink,
@@ -38,8 +35,10 @@ import {
 import confetti from 'canvas-confetti';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'soundboard' | 'timer' | 'cushion' | 'lab'>('soundboard');
-  const [selectedFartForTimer, setSelectedFartForTimer] = useState<FartSoundProfile>(FART_PRESETS[0]);
+  const [activeTab, setActiveTab] = useState<'soundboard' | 'timer' | 'cushion'>('soundboard');
+
+  // PRECONFIGURADO CON AUDIO REAL (El Bombazo Atómico)
+  const [selectedFartForTimer, setSelectedFartForTimer] = useState<FartSoundProfile>(REAL_FART_PRESETS[1]);
   const [activePlayingFartId, setActivePlayingFartId] = useState<string | null>(null);
   const [lastOnomatopoeia, setLastOnomatopoeia] = useState<string | null>(null);
 
@@ -53,13 +52,10 @@ export default function App() {
     setCustomSounds(loadCustomSounds());
   }, []);
 
-  // Mixer settings
+  // Mixer volume settings
   const [mixerSettings, setMixerSettings] = useState<FartMixerSettings>({
-    pitch: 1.0,
-    duration: 1.0,
-    wetness: 0.3,
+    volume: 1.0,
     bassBoost: true,
-    volume: 0.9,
   });
 
   // Stealth mode overlay state
@@ -70,12 +66,12 @@ export default function App() {
   } | null>(null);
   const [stealthRemainingSeconds, setStealthRemainingSeconds] = useState<number>(0);
 
-  // Play a fart sound directly (either synthesized or user custom file)
-  const playFartSound = (fart: FartSoundProfile, customMixer?: FartMixerSettings) => {
+  // Play a fart sound directly (real recorded audio file or user upload)
+  const playFartSound = (fart: FartSoundProfile) => {
     setActivePlayingFartId(fart.id);
     setLastOnomatopoeia(fart.onomatopoeia);
 
-    // If it's a custom uploaded/recorded sound
+    // If it's a user custom uploaded sound
     const customRec = customSounds.find((c) => c.id === fart.id);
     if (customRec) {
       playAudioDataUrl(customRec.dataUrl, mixerSettings.volume)
@@ -88,12 +84,12 @@ export default function App() {
       return;
     }
 
-    // Synthesized Web Audio Fart
-    const dur = fartAudio.play(fart, customMixer || mixerSettings);
+    // Real recorded audio file
+    const dur = fartAudio.play(fart, mixerSettings.volume);
 
     setTimeout(() => {
       setActivePlayingFartId(null);
-    }, dur * 1000);
+    }, (dur || 2) * 1000);
 
     setTimeout(() => {
       setLastOnomatopoeia(null);
@@ -109,9 +105,9 @@ export default function App() {
     setCustomSounds((prev) => prev.filter((s) => s.id !== id));
   };
 
-  // Quick panic fart
+  // Quick panic fart (picks randomly from real recorded sounds)
   const handleQuickPanic = () => {
-    const all = [...customSounds.map(customRecordToProfile), ...FART_PRESETS];
+    const all = [...customSounds.map(customRecordToProfile), ...REAL_FART_PRESETS];
     const random = all[Math.floor(Math.random() * all.length)];
     playFartSound(random);
     confetti({
@@ -122,7 +118,7 @@ export default function App() {
     });
   };
 
-  // Send fart from soundboard or lab to timer tab
+  // Send fart from soundboard to timer tab
   const handleSetTimerForFart = (fart: FartSoundProfile) => {
     setSelectedFartForTimer(fart);
     setActiveTab('timer');
@@ -184,7 +180,7 @@ export default function App() {
               <div className="flex items-center gap-2">
                 <span className="text-2xl">📚</span>
                 <h3 className="text-xl font-black text-black comic-font">
-                  BANCOS DE SONIDOS & HERRAMIENTAS
+                  BANCOS DE SONIDOS & AUDIOS REALES
                 </h3>
               </div>
               <button
@@ -213,14 +209,14 @@ export default function App() {
                   </a>
                 </div>
                 <p className="text-zinc-600 mb-2">
-                  Genera cualquier efecto con inteligencia artificial a partir de texto (ej. <em>&quot;pedo húmedo con eco en ascensor&quot;</em>). Tienen una sección dedicada a farts con muestras gratuitas para descargar en MP3 y subir a esta app.
+                  Genera cualquier efecto con IA o descarga muestras en MP3 y súbelas con el botón <strong>&quot;+ Subir Mi Audio&quot;</strong>.
                 </p>
                 <span className="inline-block bg-purple-200 text-purple-950 font-bold px-2 py-0.5 rounded text-[10px]">
                   Generación por IA • Créditos mensuales gratis
                 </span>
               </div>
 
-              {/* Artlist SFX & Epidemic Sound */}
+              {/* Artlist & Epidemic Sound */}
               <div className="bg-amber-50 border-2 border-black rounded-2xl p-4">
                 <div className="flex items-center justify-between mb-1">
                   <span className="font-black text-sm text-amber-950 flex items-center gap-1.5">
@@ -246,18 +242,15 @@ export default function App() {
                   </div>
                 </div>
                 <p className="text-zinc-600 mb-2">
-                  Son las plataformas de pago líderes para cineastas y creadores de contenido. Tienen secciones completas de <em>&quot;Designed Farts&quot;</em> producidas en estudio. Si tienes cuenta activa, descarga tus clips favoritos y cárgalos en el botón <strong>&quot;+ Subir MP3&quot;</strong>.
+                  Plataformas de sonido profesional. Si tienes cuenta activa, descarga tus clips favoritos y agrégalos a tu tablero al instante.
                 </p>
-                <span className="inline-block bg-amber-200 text-amber-950 font-bold px-2 py-0.5 rounded text-[10px]">
-                  Calidad de Estudio • Requieren suscripción de pago
-                </span>
               </div>
 
-              {/* Gratuitos: Pixabay & Freesound */}
+              {/* Pixabay & Freesound */}
               <div className="bg-lime-50 border-2 border-black rounded-2xl p-4">
                 <div className="flex items-center justify-between mb-1">
                   <span className="font-black text-sm text-lime-950 flex items-center gap-1.5">
-                    🎁 Pixabay & Freesound.org (100% Gratis)
+                    🎁 Pixabay & Freesound (100% Gratis)
                   </span>
                   <a
                     href="https://pixabay.com/sound-effects/search/fart/"
@@ -270,11 +263,8 @@ export default function App() {
                   </a>
                 </div>
                 <p className="text-zinc-600 mb-2">
-                  Alternativas totalmente gratuitas y sin suscripción para descargar sonidos MP3 listos para usar en tus bromas o proyectos.
+                  Descargas directas en MP3 libres de derechos.
                 </p>
-                <span className="inline-block bg-lime-200 text-lime-950 font-bold px-2 py-0.5 rounded text-[10px]">
-                  100% Gratis • Sin suscripción • Descarga en 1 clic
-                </span>
               </div>
             </div>
 
@@ -283,7 +273,7 @@ export default function App() {
                 onClick={() => setIsGuideOpen(false)}
                 className="px-5 py-2 bg-yellow-400 font-black text-xs uppercase rounded-xl border-2 border-black comic-shadow"
               >
-                Entendido
+                Cerrar
               </button>
             </div>
           </div>
@@ -309,7 +299,7 @@ export default function App() {
             }`}
           >
             <LayoutGrid className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-950" />
-            <span className="uppercase tracking-wider">Tablero</span>
+            <span className="uppercase tracking-wider">Tablero Real</span>
           </button>
 
           <button
@@ -321,9 +311,9 @@ export default function App() {
             }`}
           >
             <Timer className="w-4 h-4 sm:w-5 sm:h-5 text-current" />
-            <span className="uppercase tracking-wider">Temporizador</span>
+            <span className="uppercase tracking-wider">Temporizador Broma</span>
             <span className="hidden sm:inline-block bg-yellow-300 text-black text-[9px] font-black px-1.5 py-0.2 rounded border border-black ml-0.5">
-              BROMA
+              PRECONFIGURADO
             </span>
           </button>
 
@@ -337,18 +327,6 @@ export default function App() {
           >
             <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-current" />
             <span className="uppercase tracking-wider">Cojín Sensor</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('lab')}
-            className={`flex-1 min-w-[75px] py-2.5 px-2 rounded-xl border-2 font-black text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all ${
-              activeTab === 'lab'
-                ? 'bg-lime-400 text-lime-950 border-black comic-shadow-sm scale-102'
-                : 'bg-transparent hover:bg-lime-50 text-zinc-700 border-transparent'
-            }`}
-          >
-            <Sliders className="w-4 h-4 sm:w-5 sm:h-5 text-current" />
-            <span className="uppercase tracking-wider">Laboratorio</span>
           </button>
         </nav>
       </div>
@@ -384,14 +362,6 @@ export default function App() {
             onSelectFart={setSelectedFartForTimer}
           />
         )}
-
-        {activeTab === 'lab' && (
-          <FartLabTab
-            mixerSettings={mixerSettings}
-            onUpdateMixer={setMixerSettings}
-            onSendToTimer={handleSetTimerForFart}
-          />
-        )}
       </main>
 
       {/* Bottom Comic Footer */}
@@ -400,7 +370,7 @@ export default function App() {
           <div className="flex items-center gap-1.5">
             <span className="text-lg">💨</span>
             <span className="comic-font text-base text-black">FART BLASTER 3000</span>
-            <span>— Compatible con sonidos de Artlist, Epidemic Sound & ElevenLabs</span>
+            <span>— Audios 100% reales grabados y listos para bromas</span>
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -415,7 +385,7 @@ export default function App() {
               className="bg-lime-400 hover:bg-lime-300 text-lime-950 border-2 border-black rounded-lg px-2.5 py-1 text-[11px] font-extrabold flex items-center gap-1 comic-shadow-sm cursor-pointer"
             >
               <PlusCircle className="w-3.5 h-3.5" />
-              <span>Subir Audio MP3</span>
+              <span>Subir Mi Audio</span>
             </button>
           </div>
         </div>

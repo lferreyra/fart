@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { FART_PRESETS, FartSoundProfile } from '../audio/fartEngine';
+import { REAL_FART_PRESETS, FartSoundProfile } from '../audio/fartEngine';
 import { Smartphone, Activity, ShieldAlert, Sparkles, Volume2, RotateCcw, Play } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -222,7 +222,7 @@ export const WhoopeeCushionTab: React.FC<WhoopeeCushionTabProps> = ({
                 Sonido al sentarse / moverse:
               </label>
               <div className="flex flex-wrap items-center justify-center gap-2">
-                {FART_PRESETS.slice(0, 5).map((f) => (
+                {REAL_FART_PRESETS.slice(0, 6).map((f) => (
                   <button
                     key={f.id}
                     onClick={() => onSelectFart(f)}

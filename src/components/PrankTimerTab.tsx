@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { FART_PRESETS, FartSoundProfile } from '../audio/fartEngine';
+import { REAL_FART_PRESETS, FartSoundProfile } from '../audio/fartEngine';
 import {
   Timer,
   Bomb,
@@ -72,7 +72,7 @@ export const PrankTimerTab: React.FC<PrankTimerTabProps> = ({
     // If stealth mode is active, send to stealth overlay right away
     if (stealthMode !== 'none') {
       const chosenFart = useRandomFart
-        ? FART_PRESETS[Math.floor(Math.random() * FART_PRESETS.length)]
+        ? REAL_FART_PRESETS[Math.floor(Math.random() * REAL_FART_PRESETS.length)]
         : selectedFart;
       onActivateStealth(stealthMode, seconds, chosenFart);
       return;
@@ -95,7 +95,7 @@ export const PrankTimerTab: React.FC<PrankTimerTabProps> = ({
         setHasDetonated(true);
 
         const chosenFart = useRandomFart
-          ? FART_PRESETS[Math.floor(Math.random() * FART_PRESETS.length)]
+          ? REAL_FART_PRESETS[Math.floor(Math.random() * REAL_FART_PRESETS.length)]
           : selectedFart;
         onDetonate(chosenFart);
 
@@ -273,8 +273,8 @@ export const PrankTimerTab: React.FC<PrankTimerTabProps> = ({
                   <span>🎲 Fart Sorpresa (Aleatorio)</span>
                 </button>
 
-                {/* Individual Farts */}
-                {FART_PRESETS.slice(0, 6).map((fart) => (
+                {/* Real Recorded Farts */}
+                {REAL_FART_PRESETS.map((fart) => (
                   <button
                     key={fart.id}
                     onClick={() => {
